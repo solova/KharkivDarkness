@@ -6,7 +6,7 @@ var khMap;
 function init(){
   khMap = new ymaps.Map("map", {
     center: [50, 36.25],
-    zoom: 11
+    zoom: 12
   });
   place(coordsA, 'red');
   place(coordsB, 'green');
@@ -21,7 +21,10 @@ function place(coords, color){
     geoObjects[i] = new ymaps.GeoObject({
       geometry: {
         type: "Point",
-        coordinates: [coords[i][1], coords[i][0]]
+        coordinates: [coords[i][1], coords[i][2]]
+      },
+      properties: {
+        hintContent: coords[i][0]
       }
     }, {
       preset: 'islands#' + color + 'CircleDotIcon'

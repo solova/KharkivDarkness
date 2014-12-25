@@ -1,54 +1,113 @@
-# encoding=utf8
+# -*- coding: utf-8 -*-
 import sys
 import requests
+import codecs
+import re
+variable = 'coordsB'
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+# sys.stdin = open('a.dat')
+# sys.stdin = codecs.getreader("utf-8")(sys.stdin)
 
-sys.stdin = open('svet')
-outfile = open('out.txt', 'w')
+fin = codecs.open('0.dat', encoding='utf-8')
 
-lines = sys.stdin.readlines()
-first = ""
+outfile = codecs.open('out.txt', 'w', encoding='utf-8')
+
+lines = fin.readlines()
+lastStreet = ""
+lastBuilding = ""
+
+archive = []
+
+def isDigit(str):
+	return len(str)==1 and str[0] in ['1','2','3','4','5','6','7','8','9','0']
+
+def isBuildingNumber(str):
+	return isDigit(str[0])
+
+def trimBuildingNumber(str):
+	res = ""
+	i = 0
+	while str and isDigit(str[0]):
+		res += str[0]
+		str = str[1:]
+	return res
+
 
 def getcoo(address):
+	# return '1 1'
+	# print u'http://geocode-maps.yandex.ru/1.x/?format=json&geocode=Харьков,' + address
 	r = requests.get(u'http://geocode-maps.yandex.ru/1.x/?format=json&geocode=Харьков,' + address)
-	return r.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
+	res = r.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos'].strip()
+	return res
+
+
+# def str:
+# 	return str.decode('cp1251').encode('utf-8')
+
+outfile.write('var ' + variable + ' = [\n')
 
 cnt = 0
+lastType = ""
 for line in lines:
-	print cnt
-	cnt += 1
-	line = line.strip()
-	components = line.split(",")
-	if len(components) > 1 and components[1]:
-		for comp in components:
-			comp = comp.strip()
-			if comp.startswith('1') or comp.startswith('2') or comp.startswith('3') or comp.startswith('4') or comp.startswith('5') or comp.startswith('6') or comp.startswith('7') or comp.startswith('8') or comp.startswith('9'):
-				res = first + ', ' + comp
-				outfile.write(res + '/////' + getcoo(res) + '\n')
-			else:
-				while comp.endswith('0') or comp.endswith('1') or comp.endswith('2') or comp.endswith('3') or comp.endswith('4') or comp.endswith('5') or comp.endswith('6') or comp.endswith('7') or comp.endswith('8') or comp.endswith('9'):
-					comp = comp[:-1].strip()
-				comp = comp.split(' ')
-				if len(comp) > 1 and '1' not in comp[1] and '2' not in comp[1] and  '3' not in comp[1] and  '4' not in comp[1] and  '5' not in comp[1] and  '6' not in comp[1] and  '7' not in comp[1] and  '8' not in comp[1] and '9' not in comp[1]:
-					comp = comp[0] + ' ' + comp[1]
-				else:
-					comp = comp[0]
-				first = comp
-	elif len(line)>4:
-		res = line
-		outfile.write(res + '/////' + getcoo(res) + '\n')
-	# if components[0].startswith(u'ул.') and components[0].startswith(u'пр.') or components[0].startswith(u'пер.') or components[0].startswith(u'в-зд') or components[0].startswith(u'пр-зд'):
-	# 	first = components[0]
+	line = re.sub(u'п.[1-9]','',line)
 
-	# if len(line) < 5 or line.startswith('1') or line.startswith('2') or line.startswith('3') or line.startswith('4') or line.startswith('5') or line.startswith('6') or line.startswith('7') or line.startswith('8') or line.startswith('9'):
-	# 	sys.stdout.write(first + ', ' + line)
-	# 	sys.stdout.write('\n')
-	# elif len(components) > 2:
-	# 	for c in components[1:]:
-	# 		sys.stdout.write(first + ', ' + c)
-	# 		sys.stdout.write('\n')
-	# else:
-	# 	sys.stdout.write(line)
-	# 	sys.stdout.write('\n')
+	line = line.strip().replace(u'Ж.д.(частный сектор):', ',')
+	line = line.strip().replace(u'ж.дом','')
+	line = line.strip().replace(u'ж.д','')
+	line = line.strip().replace(u'№','')
+	line = line.strip().replace(u'—', '-')
+	line = line.strip().replace(' - ',' , ')
+	line = line.strip().replace(';',',')
+	line = line.strip().replace('  ',',')
+
+
+	components = line.split(",")
+
+	for comp in components:
+		print cnt
+		cnt += 1
+		comp = comp.strip()
+		# re.sub('[0-9] ','',comp)
+		comp = re.sub(u'([0-9]) ([а-я])$',r'\1\2',comp)
+		comp = re.sub(u'([0-9])-([а-я])$',r'\1\2',comp)
+
+		if len(comp):
+			# print comp, len(comp), isDigit(comp)
+			if len(comp) == 1 and not isDigit(comp):
+				res = lastStreet + ' ' + lastBuilding + ' ' + comp
+				lastType = "letter";
+			elif isBuildingNumber(comp):
+				lastBuilding = trimBuildingNumber(comp)
+				res = lastStreet + ' ' + comp
+				lastType = "building"
+			# elif not isBuildingNumber(comp):
+			elif len(comp)<=6:
+				lastBuilding = comp
+				res = lastStreet + ' ' + comp
+				lastType = "building"
+			else:
+				parts = comp.split(' ')
+				if len(parts) > 1 and isBuildingNumber(parts[-1]):
+					lastStreet = " ".join(parts[:-1])
+					lastBuilding = trimBuildingNumber(parts[-1])
+					lastType = "building";
+					res = lastStreet + ' ' + parts[-1]
+				else:
+					if lastType == "street":
+						res = lastStreet
+					else:
+						res = None
+					lastStreet = comp
+					lastType = "street"
+
+			if res:
+				res = re.sub(u'([0-9]) ([а-я])$',r'\1\2',res)
+				res = re.sub(u'([0-9])-([а-я])$',r'\1\2',res)
+				coo = getcoo(res)
+				# print 'coo', coo
+				if coo not in archive:
+					archive.append(coo)
+					coo = coo.split()
+					outfile.write('\t["' + res + '", ' + coo[1] + ', ' + coo[0] + '],' + ' \n')
+
+outfile.write(']\n')
