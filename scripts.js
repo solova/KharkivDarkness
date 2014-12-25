@@ -1,8 +1,6 @@
 ymaps.ready(init);
 var khMap;
 
-// noprotect
-
 function init(){
   khMap = new ymaps.Map("ymap", {
     center: [50, 36.25],

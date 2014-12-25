@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css.min">
   <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
   <script src="data.js" type="text/javascript"></script>
   <script src="scripts.js" type="text/javascript"></script>
@@ -10,12 +10,13 @@
 </head>
 <body>
 	<!-- <div id="header"> -->
+		<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
         <ul class="tabs" data-persist="true">
             <li><a href="#map">Карта</a></li>
             <li><a href="#schedule">График</a></li>
-            <li><a href="#news">В СМИ</a></li>
+            <!-- <li><a href="#news">В СМИ</a></li> -->
         </ul>
-		<!-- <div id="fb-root"></div> -->
+
 	<!-- </div> -->
 	<div id="container" class="tabcontents">
 		<div id="map">
@@ -26,7 +27,7 @@
 			<table><tbody><tr> <th><b> Период отключения</b></th><th><b> 8.30-10.30 </b></th><th><b> 10.30-12.30</b></th><th><b> 12.30-14.30</b></th><th><b> 14.30-16.30</b></th><th><b> 16.30-18.30</b></th><th><b> 18.30-20.30</b></th><th><b> 20.30-22.30</b></th></tr><tr><td> 23.12.14 - 28.12.14 </td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td></tr><tr><td> 29.12.14 - 04.01.15</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td></tr><tr><td> 05.01.15 - 11.01.15</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td></tr><tr><td> 12.01.15 - 18.01.15 </td><td>А </td><td>Б </td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td></tr><tr><td> 19.01.15 - 25.01.15 </td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td></tr><tr><td> 26.01.15 - 01.02.15 </td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td><td class="red">А</td><td class="green">Б</td><td class="blue">В</td></tr><tr><td colspan="8" style="text-align: center;">Актуальный график и список потребителей доступен на сайте <a target="_blank" href="http://www.oblenergo.kharkov.ua/8_grafik_avaria.htm">ХарьковОблЭнерго</a></td></tr></tbody></table>
 
 		</div>
-		<div id="news">
+<!-- 		<div id="news">
 			<ul class="news">
 				<li><a href="http://www.mediaport.ua/otklyuchenie-elektrichestva-grafik-harkovoblenergo">Отключение электричества: график «Харьковоблэнерго» &mdash; Медиапорт</a></li>
 				<li><a href="http://atn.ua/obshchestvo/grafiki-veernyh-otklyucheniy-na-harkovshchine-izmenyatsya-i-chem-grozit-otklyuchenie">Графики веерных отключений на харьковщине изменятся? чем чреваты хаотичные отключения &mdash; АТН</a></li>
@@ -34,14 +35,15 @@
 				<li><a href="http://glavnoe.ua/news/n206291">На Харьковщине обещают задействовать график отключений света лишь в случае необходимости &mdash; Главное</a></li>
 				<li><a href="http://dozor.kharkov.ua/events/economy-promyshlennost/1157001.html">Итоги первого дня веерных отключений света в Харькове &mdash; Городской Дозор</a></li>
 			</ul>
-		</div>
+		</div> -->
 	</div>
 
+	<div id="fb-root"></div>
 	<script>(function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
 	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=237895083065150&version=v2.0";
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=778995575469635&version=v2.0";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
 </body>

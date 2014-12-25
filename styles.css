@@ -202,3 +202,8 @@ div.tabcontents
 {
     border-top: 1px solid #CCC; padding: 30px 10px;
 }
+
+div.fb-like{
+	float: right;
+	padding-top: 4px;
+}
