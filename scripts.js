@@ -4,13 +4,17 @@ var khMap;
 // noprotect
 
 function init(){
-  khMap = new ymaps.Map("map", {
+  khMap = new ymaps.Map("ymap", {
     center: [50, 36.25],
     zoom: 12
   });
   place(coordsA, 'red');
   place(coordsB, 'green');
   place(coordsC, 'blue');
+
+  if (window.location.hash === ''){
+    window.location.hash = 'map';
+  }
 
 }
 
